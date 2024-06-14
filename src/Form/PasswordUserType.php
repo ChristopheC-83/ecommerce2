@@ -71,7 +71,7 @@ class PasswordUserType extends AbstractType
                 // dd($form->getConfig()->getOptions()['data']);
                 $form = $event->getForm();
 
-                dd($form);
+                // dd($form);
                 $user = ($form->getConfig()->getOptions()['data']);
                 $passwordHasher = $form->getConfig()->getOptions()['passwordHasher'];
 

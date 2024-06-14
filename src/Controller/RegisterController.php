@@ -33,7 +33,9 @@ class RegisterController extends AbstractController
             // enregistres les datas et DB, injection de dépendance avec EntityManagerInterface
             $entityManager->persist($user);   // fige les données
             $entityManager->flush();          // envoi les données
+            $this->addFlash('success', 'Votre compte a bien été créé ! Vous pouvez vous connecter.');  // message flash de confirmation
 
+            return $this->redirectToRoute('app_login');  // redirection vers la page de connexion
 
         }
         // potentiellement, envoi un message de confirmation

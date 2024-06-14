@@ -15,6 +15,7 @@ class AccountController extends AbstractController
     #[Route('/compte', name: 'app_account')]
     public function index(): Response
     {
+       
         return $this->render('account/index.html.twig');
 
     }
@@ -26,7 +27,10 @@ class AccountController extends AbstractController
         EntityManagerInterface $entityManager
          ): Response
     {
-        $user = $this->getUser();  // on récup les données du user connecté opur les envoyer au formulaire
+
+      
+
+        $user = $this->getUser();  // on récup les données du user connecté pour les envoyer au formulaire
         // dd($user);
 
         $form = $this->createForm(PasswordUserType::class, $user, [
@@ -42,6 +46,10 @@ class AccountController extends AbstractController
             // return $this->redirectToRoute('app_account');
 
             // ici pas de persist car c'est une modifcation, pas une création de data.
+            $this->addFlash(
+                'success',
+                'Votre mot de passe a bien été modifié.'
+            );
             $entityManager->flush();
         }
 

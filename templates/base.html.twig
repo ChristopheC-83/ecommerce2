@@ -67,15 +67,27 @@
 			</nav>
 		</header>
 
-		<main class=" flex-grow-1">
+		<main class=" flex-grow-1 position-relative">
+
+			<div class="container_alerts">
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ label }} containerForm mx-auto my-4">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+
 			{# contient les infos du user connecté ou null si pas de connexion #}
-			{# {{ dump(app.user) }} #}{% block body %}
-		{% endblock %}
+			{# {{ dump(app.user) }} #}
+			{% block body %}{% endblock %}
 		</main>
 
 
 		<!-- FOOTER -->
-			<footer class="container"> <p>&copy; 2017–2024 La Boutique Française
+		<footer class="container">
+			<p>&copy; 2017–2024 La Boutique Française
 				<a href="#">CGV</a>
 				&middot;
 				<a href="#">CGU</a>
@@ -84,5 +96,6 @@
 
 		<script src="{{ asset('assets/js/bootstrap.bundle.min.js')}}"></script>
 		<script src="{{ asset('assets/js/global.js')}}"></script>
+		<script src="{{ asset('assets/js/custom.js')}}"></script>
 	</body>
 </html>
