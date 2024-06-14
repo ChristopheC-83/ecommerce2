@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\User;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -23,7 +24,7 @@ class RegisterUserType extends AbstractType
                 'constraints' => [
                     new Length([
                         'min' => 2,
-                        'minMessage' => 'Votre nom doit contenir au moins {{ limit }} caractères',
+                        'minMessage' => 'Votre prénom doit contenir au moins {{ limit }} caractères',
                     ]),
                 ],
                 'attr' => [
@@ -32,17 +33,29 @@ class RegisterUserType extends AbstractType
             ])
             ->add('lastname', TextType::class, [
                 'label' => 'Votre nom',
+                'constraints' => [
+                    new Length([
+                        'min' => 2,
+                        'minMessage' => 'Votre nom doit contenir au moins {{ limit }} caractères',
+                    ]),
+                ],
                 'attr' => [
                     'placeholder' => 'Indiquez votre nom',
                 ],
             ])
+
+            // pas de contrainte d'unicité sur ici mais sur l'entité globale, fonction suivante de vce fichier
             ->add('email', EmailType::class, [
                 'label' => 'Votre adresse email',
                 'attr' => [
                     'placeholder' => 'Entrez votre adresse email',
                 ],
             ])
+
+            //  on ne veut pas que l'user qui s'inscrit puisse choisir son role
             // ->add('roles')
+
+            // si on demande le mot de passe sans vérification
             // ->add('password', PasswordType::class, [
             //     'label' => 'Votre mot de passe',
             //     'attr' => [
@@ -91,7 +104,16 @@ class RegisterUserType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
+
+            //  ici contrainte globale sur l'entité User
             'data_class' => User::class,
+            'constraints' => [
+                new UniqueEntity([
+                    'entityClass' => User::class,
+                    'fields' => 'email',
+                    'message' => 'Cette adresse email est déjà utilisée',
+                ]),
+            ],
         ]);
     }
 }
