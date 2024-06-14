@@ -81,7 +81,7 @@ class RegisterUserType extends AbstractType
                 ],
                 ],
                 'second_options' => [
-                    'label' => 'Confirmerz votre mot de passe',
+                    'label' => 'Confirmez votre mot de passe',
                     'attr' => [
                     'placeholder' => 'Entrez une seconde fois votre mot de passe',
                 ],
