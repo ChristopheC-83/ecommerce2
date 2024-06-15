@@ -1,1 +1,1 @@
-- modifier nom / prénom de l'utilisateur
+- modifier nom / prénom de l'utilisateur                 OK

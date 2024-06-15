@@ -44,7 +44,7 @@ class RegisterUserType extends AbstractType
                 ],
             ])
 
-            // pas de contrainte d'unicité sur ici mais sur l'entité globale, fonction suivante de vce fichier
+            // pas de contrainte d'unicité sur ici mais sur l'entité globale, fonction suivante de ce fichier
             ->add('email', EmailType::class, [
                 'label' => 'Votre adresse email',
                 'attr' => [

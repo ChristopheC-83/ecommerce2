@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<div class="container">
+	<h1 class="text-decoration-underline my-5">Mon Compte</h1>
+
+		<div class="row">
+			<div class="col-md-4">
+				{% include 'account/_menu.html.twig' %}
+			</div>
+			<div class="col-md-7 ms-auto">
+				<h5 class="mb-4">Modifier mon adresse email</h5>
+                {# {{ dump(app.user) }} #}
+				{{ form(modifyMail) }}
+            
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
