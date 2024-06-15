@@ -34,9 +34,6 @@ class UserCrudController extends AbstractCrudController
         // variable
         // nom et prénom
 
-
-
-
         return [
             //  ici pas des tableau comme dans le formulaires mais des méthodes, ce sont des champs, pas des imput !
             IdField::new('id')->hideOnForm(),   // ->hideOnForm() permet de cacher le champ dans le formulaire
