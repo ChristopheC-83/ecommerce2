@@ -6,7 +6,8 @@
 		<h1 class="text-decoration-underline my-5">Mon Panier</h1>
 
 		<div class="row">
-			<div class="col-md-8">
+			<div
+				class="col-md-8">
 
 				{# {{dump(cart)}} #}
 
@@ -15,7 +16,7 @@
 
 						{# {{dump(product)}} #}
 
-						<div class="col-md-3">
+						<div class="col-md-2">
 							<a href="{{ path('app_product', {'slug': product.object.slug}) }}"><img src="/uploads/illustrations/{{product.object.illustration}}" alt="{{product.object.name}}" class="img-fluid shadow-sm rounded"></a>
 						</div>
 						<div class="col-md-5">
@@ -23,12 +24,19 @@
 							<p class="small">Prix unitaire :
 								{{product.object.price|price}}</p>
 						</div>
-						<div class="col-md-1 text-right small pt-4"><span class="badge text-bg-secondary">{{product.qty}}</span></div>
-						<div class="col-md-3 small pt-4 fw-semibold">
-							<p>{{(product.qty * product.object.price)|price}}</p>
+						<div class="col-md-2 text-right small pt-2 d-flex align-items-center justify-content-between gap-1">
+							<a href="{{ path('app_cart_decrease', { id : product.object.id}) }}" class="badge text-bg-danger pb-1">-</a>
+							<span class="badge text-bg-secondary">x{{product.qty}}</span>
+							<a href="{{ path('app_cart_add', { id : product.object.id}) }}" class="badge text-bg-success pb-1">+</a>
+						</div>
+						<div class="col-md-2 small pt-2 fw-semibold d-flex align-items-center justify-content-end">
+							<p class="m-0">{{(product.qty * product.object.price)|price}}</p>
 						</div>
 					{% endfor %}
 				</div>
+				<a href="{{ path('app_cart_remove') }}" class="btn btn-danger mt-5">
+					Vider le panier
+				</a>
 
 
 			</div>
