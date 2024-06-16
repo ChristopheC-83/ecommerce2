@@ -37,5 +37,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Utilisateurs', 'fas fa-users-gear', User::class);
         yield MenuItem::linkToCrud('Catégories', 'fas fa-swatchbook', Category::class);
         yield MenuItem::linkToCrud('Produits', 'fas fa-car-on', Product::class);
+        yield MenuItem::linkToUrl('Retour au site', 'fas fa-home', '/');
     }
 }
