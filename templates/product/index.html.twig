@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<div
+		class="container my-5">
+		{# {{dump(product.category.name)}} #}
+
+		<div class="row">
+			<div class="col-md-6">
+				<img src="/uploads/illustrations/{{product.illustration}}" alt="{{ product.name }}" class="img-fluid"></div>
+			<div class="col-md-6 d-flex flex-column justify-content-between">
+
+				<span class="small text-secondary fst-italic ">
+					<a href="{{ path('app_categories')}}" class="text-secondary">Tous les produits</a>
+					>
+					<a href="{{ path('app_category', {'slug': product.category.slug}) }}" class="text-secondary">{{ product.category.name }}</a>
+					>
+					<span class="text-capitalize">{{ product.name }}</span>
+				</span>
+				<h1 class="text-decoration-underline mb-3 text-uppercase">{{ product.name }}</h1>
+                    <p class="fw-bold">{{product.price|price}}</p>
+
+				<div class="flex-grow-1">{{product.description|raw}}</div>
+
+				
+                    <button class="btn btn-dark w-100">Ajouter au panier</button>
+                
+			</div>
+		</div>
+
+	</div>
+{% endblock %}

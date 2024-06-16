@@ -32,12 +32,25 @@ class ProductCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
+        //  ce tricks $required permet de 
+        // rendre le champs obligatoire lors de la création ET 
+        // rendre facultatif lors de la modification
+        $required = true;
+
+        if ($pageName == 'edit') {
+            $required = false;
+        }
+
         return [
             TextField::new('name')->setLabel('désignation')->setHelp('nom du véhicule'),
             SlugField::new('slug')->setLabel('URL')->setTargetFieldName('name')->hideOnIndex()->setHelp('URL du véhicule généré automatiquement !'),
             TextEditorField::new('description')->setLabel('description')->setHelp('description du véhicule'),
-            ImageField::new('illustration')->setLabel('image')->setUploadedFileNamePattern('[year]-[month]-[day]-[contenthash].[extension]')->setUploadDir('/public/uploads/illustrations')
-            ->setBasePath('uploads/illustrations')->setRequired(false)->setHelp('image du véhicule en 600 x 600px'),
+            ImageField::new('illustration')
+                ->setLabel('image')
+                ->setUploadedFileNamePattern('[year]-[month]-[day]-[contenthash].[extension]')->setUploadDir('/public/uploads/illustrations')
+                ->setBasePath('uploads/illustrations')
+                ->setRequired($required)
+                ->setHelp('image du véhicule en 800x520px'),
             NumberField::new('price')->setLabel('prix HT')->setHelp('prix du véhicule HT sans le sigle de la monnaie €'),
             ChoiceField::new('tva')->setLabel('TVA')->setHelp('TVA du véhicule')->setChoices([
                 '5.5%' => '5.5',

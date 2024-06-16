@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\CategoryRepository;
+use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -18,6 +19,9 @@ class CategoryController extends AbstractController
 
         $categories = $categoryRepository->findAll();
         $category = $categoryRepository->findOneBySlug($slug);
+        if (!$category) {
+            return $this->redirectToRoute('app_home');
+        }
         // dd($category);
 
         return $this->render('category/index.html.twig', [
@@ -26,13 +30,15 @@ class CategoryController extends AbstractController
         ]);
     }
     #[Route('/categories', name: 'app_categories')]
-    public function allCategoriesProducts(CategoryRepository $categoryRepository): Response
+    public function allCategoriesProducts(CategoryRepository $categoryRepository, ProductRepository $productRepository): Response
     {
         $categories = $categoryRepository->findAll();
+        $products = $productRepository->findAll();
         // dd($category);
 
         return $this->render('category/allCategories.html.twig', [
-            'categories' => $categories
+            'categories' => $categories,
+            'products' => $products
         ]);
     }
 }
