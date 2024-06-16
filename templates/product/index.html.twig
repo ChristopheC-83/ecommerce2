@@ -23,7 +23,7 @@
 				<div class="flex-grow-1">{{product.description|raw}}</div>
 
 				
-                    <button class="btn btn-dark w-100">Ajouter au panier</button>
+                    <a href="{{ path('app_cart_add', { id : product.id}) }}" class="btn btn-dark w-100">Ajouter au panier</a>
                 
 			</div>
 		</div>

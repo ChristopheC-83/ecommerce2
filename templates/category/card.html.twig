@@ -1,6 +1,6 @@
 <div class="col-md-3">
 	<a href="{{ path('app_product', { slug : product.slug}) }}" class="text-black">
-		<img src="/uploads/illustrations/{{ product.illustration }}" alt="" class="img-fluid">
+		<img src="/uploads/illustrations/{{ product.illustration }}" alt="" class="img-fluid rounded shadow-sm">
 		<div class="text-center fw-bold text-capitalize">{{ product.name }}</div>
 	</a>
 		{# <div class="text-center">{{ product.pricewt|number_format(2, ',')  }} €</div> #}

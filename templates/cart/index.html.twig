@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<div class="container">
+
+		<h1 class="text-decoration-underline my-5">Mon Panier</h1>
+
+		<div class="row">
+			<div class="col-md-8">
+
+				{# {{dump(cart)}} #}
+
+				<div class="row row-gap-3">
+					{% for product in cart %}
+
+						{# {{dump(product)}} #}
+
+						<div class="col-md-3">
+							<a href="{{ path('app_product', {'slug': product.object.slug}) }}"><img src="/uploads/illustrations/{{product.object.illustration}}" alt="{{product.object.name}}" class="img-fluid shadow-sm rounded"></a>
+						</div>
+						<div class="col-md-5">
+							<p class=" fw-bold m-0">{{product.object.name}}</p>
+							<p class="small">Prix unitaire :
+								{{product.object.price|price}}</p>
+						</div>
+						<div class="col-md-1 text-right small pt-4"><span class="badge text-bg-secondary">{{product.qty}}</span></div>
+						<div class="col-md-3 small pt-4 fw-semibold">
+							<p>{{(product.qty * product.object.price)|price}}</p>
+						</div>
+					{% endfor %}
+				</div>
+
+
+			</div>
+
+			<div class="col-md-4">Recap du panier et btn de validation</div>
+		</div>
+	</div>
+
+
+{% endblock %}
