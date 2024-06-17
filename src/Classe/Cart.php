@@ -15,6 +15,7 @@ class Cart
 
     }
 
+    // ajouter un produit dans le panier
     public function add($product)
     {
         // dd($product);
@@ -22,7 +23,7 @@ class Cart
         // appeler session symfo, elle fera transiter l'objet panier/cart de page en page
         $session = $this->requestStack->getSession();
         // récupérer le panier actuel
-        $cart = $this->requestStack->getSession()->get('cart');
+        $cart = $this->getCart();
         // dd($session);
 
         //  si le produit est déjà présent, on rajoute une unité
@@ -40,13 +41,15 @@ class Cart
         // créer session Cart
         $this->requestStack->getSession()->set('cart', $cart);
 
-        // dd($this->requestStack->getSession()->get('cart'));
+        // dd($this->getCart());
 
     }
 
+
+    // retirer un produit du panier
     public function decrease($id)
     {
-        $cart = $this->requestStack->getSession()->get('cart');
+        $cart = $this->getCart();
 
         if ($cart[$id]['qty'] > 1) {
             $cart[$id]['qty'] = $cart[$id]['qty'] - 1;
@@ -57,11 +60,62 @@ class Cart
 
     }
 
+    // retourne la quantité totale d'articles dans le panier
+    public function fullQuantity()
+    {
+        $cart = $this->getCart();
+        $quantity = 0;
+
+        if (!isset($cart)) {
+            return $quantity;
+        }
+
+        foreach ($cart as $item) {
+            $quantity += $item['qty'];
+        }
+        // dd($quantity);
+        return $quantity;
+    }
+
+    // retourne le montant total HT du panier
+    public function getTotal()
+    {
+        $cart = $this->getCart();
+        $price = 0;
+
+        if (!isset($cart)) {
+            return $price;
+        }
+
+        foreach ($cart as $product) {
+            $price += $product['object']->getPrice() * $product['qty'];
+        }
+        return $price;
+    }
+
+    // retourne le montant total TTC du panier
+    public function getTotalWt()
+    {
+        $cart = $this->getCart();
+        $price = 0;
+
+        if (!isset($cart)) {
+            return $price;
+        }
+
+        foreach ($cart as $product) {
+            $price += $product['object']->getPriceWt() * $product['qty'];
+        }
+        return $price;
+    }
+
+    // retourne le contenu du panier
     public function getCart()
     {
         return $this->requestStack->getSession()->get('cart');
     }
 
+    // vider le panier totalement
     public function remove()
     {
         return $this->requestStack->getSession()->remove('cart');
