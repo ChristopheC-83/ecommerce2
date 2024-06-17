@@ -2,6 +2,7 @@
 
 namespace App\Controller\Account;
 
+use App\Classe\Cart;
 use App\Entity\Address;
 use App\Form\AddressUserType;
 use App\Repository\AddressRepository;
@@ -48,7 +49,7 @@ class AddressesController extends AbstractController
     //  le slug id est optionnel, si on a un id, c'est qu'on modifie une adresse, sinon on en ajoute une
 
     #[Route('/compte/adresse/ajouter/{id}', name: 'app_account_address_form', defaults: ['id' => null])]
-    public function form(Request $request, $id, AddressRepository $addressRepository): Response
+    public function form(Request $request, $id, AddressRepository $addressRepository, Cart $cart): Response
     {
         if ($id) {
             // on récupère l'adresse à modifier en passant par entityManager
@@ -77,6 +78,11 @@ class AddressesController extends AbstractController
             $this->entityManager->persist($address);
             $this->entityManager->flush();
             $this->addFlash('success', 'Votre adresse a bien été enregistrée.');
+
+            if($cart->fullQuantity() > 0) {
+                return $this->redirectToRoute('app_order');
+            }
+
             return $this->redirectToRoute('app_account_addresses');
         }
 

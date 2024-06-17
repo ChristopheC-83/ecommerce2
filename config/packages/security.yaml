@@ -35,6 +35,7 @@ security:
         - { path: ^/admin/admin2, roles: ROLE_ADMIN2 }
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/modo, roles: ROLE_MODO }
+        - { path: ^/commande, roles: ROLE_USER }
         - { path: ^/compte, roles: ROLE_USER }
         # - { path: ^/profile, roles: ROLE_USER }
 
