@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<div class="container">
+		<h1 class="text-decoration-underline my-5">Mon Compte</h1>
+
+		<div class="row">
+			<div class="col-md-4">
+				{% include 'account/_menu.html.twig' %}
+			</div>
+			<div class="col-md-7 ms-auto">
+				<h5 class="mb-4">Ajouter une adresse</h5>
+				{# nous allons couper le formulaire en 2 colonnes #}
+				{{form_start(addressForm)}}
+				<div class="row">
+					<div class="col-md-6">{{form_row(addressForm.firstname)}}</div>
+					<div class="col-md-6">{{form_row(addressForm.address)}}</div>
+					<div class="col-md-6">{{form_row(addressForm.lastname)}}</div>
+					<div class="col-md-6">{{form_row(addressForm.postal)}}</div>
+					<div class="col-md-6">{{form_row(addressForm.country)}}</div>
+					<div class="col-md-6">{{form_row(addressForm.city)}}</div>
+					<div class="col-md-6">{{form_row(addressForm.phone)}}</div>
+				</div>
+				{{form_end(addressForm)}}
+			</div>
+		</div>
+	</div>
+</div>{% endblock %}

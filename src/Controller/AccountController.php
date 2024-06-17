@@ -2,10 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Address;
 use App\Entity\User;
+use App\Form\AddressUserType;
 use App\Form\EmailUserType;
 use App\Form\NameUserType;
 use App\Form\PasswordUserType;
+use App\Repository\AddressRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,6 +18,17 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class AccountController extends AbstractController
 {
+
+    private $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
+
+
+
     #[Route('/compte', name: 'app_account')]
     public function index(): Response
     {
@@ -26,8 +40,7 @@ class AccountController extends AbstractController
     #[Route('/compte/modifier-mdp', name: 'app_account_modify_pwd')]
     public function password(
         Request $request,
-        UserPasswordHasherInterface $passwordHasher,
-        EntityManagerInterface $entityManager
+        UserPasswordHasherInterface $passwordHasher
     ): Response {
 
 
@@ -52,7 +65,7 @@ class AccountController extends AbstractController
                 'success',
                 'Votre mot de passe a bien été modifié.'
             );
-            $entityManager->flush();
+            $this->entityManager->flush();
         }
 
 
@@ -65,7 +78,6 @@ class AccountController extends AbstractController
     #[Route('/compte/modifier-nom', name: 'app_account_modify_name')]
     public function changeName(
         Request $request,
-        EntityManagerInterface $entityManager
     ): Response {
 
         $form = $this->createForm(NameUserType::class, $this->getUser());
@@ -73,36 +85,102 @@ class AccountController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+            $this->entityManager->flush();
             $this->addFlash('success', 'Vos nom/prénom ont bien été modifiés');
             return $this->redirectToRoute('app_account_modify_name');
         }
 
         return $this->render('account/changeName.html.twig', [
             'modifyName' => $form->createView(),
-            ]);
+        ]);
 
     }
     #[Route('/compte/modifier-email', name: 'app_account_modify_email')]
     public function changeEmail(
         Request $request,
-        EntityManagerInterface $entityManager
     ): Response {
         $form = $this->createForm(EmailUserType::class, $this->getUser());
         // dd($form);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+            $this->entityManager->flush();
             $this->addFlash('success', 'Votre adresse email a bien été modifiée');
             return $this->redirectToRoute('app_account_modify_email');
         }
-
 
         return $this->render('account/changeMail.html.twig', [
             'modifyMail' => $form->createView(),
         ]);
 
     }
+
+
+    #[Route('/compte/adresses', name: 'app_account_addresses')]
+    public function addresses(): Response
+    {
+
+        return $this->render('account/addresses.html.twig');
+
+    }
+    #[Route('/compte/adresses/delete/{id}', name: 'app_account_address_delete')]
+    public function addressDelete(Request $request, $id, AddressRepository $addressRepository): Response
+    {
+        $address = $addressRepository->findOneById($id);
+        if(!$address OR $address->getUser() != $this->getUser()){
+            $this->addFlash('warning', 'Cette adresse n\'existe pas ou ne vous appartient pas.');
+            return $this->redirectToRoute('app_account_addresses');
+        }
+        
+        $this->entityManager->remove($address);
+        $this->entityManager->flush();
+
+        $this->addFlash('info', 'Cette adresse a bien été supprimée.');
+        return $this->redirectToRoute('app_account_addresses');
+    }
+
+    // On va utiliser le même formulaire pour ajouter et modifier une adresse
+    //  le slug id est optionnel, si on a un id, c'est qu'on modifie une adresse, sinon on en ajoute une
+
+    #[Route('/compte/adresse/ajouter/{id}', name: 'app_account_address_form', defaults: ['id' => null])]
+    public function addressForm(Request $request, $id, AddressRepository $addressRepository): Response
+    {
+        if($id){
+            // on récupère l'adresse à modifier en passant par entityManager
+            // $address = $this->entityManager->getRepository(Address::class)->findOneById($id);
+            // ou par addressRepository, mieux car séparation des responsabilités !
+            $address = $addressRepository->findOneById($id);
+
+                //  vérifions si l'adresse existe et appartient bien à l'utilisateur connecté
+                if(!$address OR $address->getUser() != $this->getUser()){
+                    $this->addFlash('warning', 'Cette adresse n\'existe pas ou ne vous appartient pas.');
+                    return $this->redirectToRoute('app_account_addresses');
+                }
+        }else{
+            //  on crée une nouvelle adresse
+            $address = new Address();
+            // on set le user connecté pour l'user_id
+            $address->setUser($this->getUser());
+        }
+
+
+        $form = $this->createForm(AddressUserType::class, $address);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $this->entityManager->persist($address);
+            $this->entityManager->flush();
+            $this->addFlash('success', 'Votre adresse a bien été enregistrée.');
+            return $this->redirectToRoute('app_account_addresses');
+        }
+
+        return $this->render('account/addressForm.html.twig', [
+            'addressForm' => $form->createView(),
+        ]);
+
+    }
+
+
 
 
 }
