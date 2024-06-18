@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<div class="container">
+
+		<h1 class="text-decoration-underline my-5">Récapitulatif de ma commande</h1>
+
+		<div class="row">
+			<div class="col-md-8">
+				<div class="bg-light rounded mb-3 pb-3 ps-2">
+					<p class="mb-1">
+						<b>Contenu du panier</b>
+					</p>
+					<div class="row row-gap-3">
+						{% for product in cart %}
+							{# {{dump(product)}} #}
+							<div class="col-md-2">
+								<a href="{{ path('app_product', {'slug': product.object.slug}) }}"><img src="/uploads/illustrations/{{product.object.illustration}}" alt="{{product.object.name}}" class="img-fluid shadow-sm rounded"></a>
+							</div>
+							<div class="col-md-5">
+								<p class=" fw-bold m-0">{{product.object.name}}</p>
+								<p class="small">Prix unitaire :
+									{{product.object.pricewt|price}}</p>
+							</div>
+							<div class="col-md-2 text-right small pt-2 d-flex align-items-center justify-content-between gap-1">
+								<span class="badge text-bg-secondary p-2">
+									<p class="m-0">x{{product.qty}}</p>
+								</span>
+							</div>
+							<div class="col-md-2 small pt-2 fw-semibold d-flex align-items-center justify-content-end">
+								<p class="m-0">{{(product.qty * product.object.pricewt)|price}}</p>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+				<div class="bg-light rounded ps-2">
+					<p class="mb-0">
+						<b>Adresse de livraison :</b>
+					</p>
+					<p>{{ choices.addresses.firstname}}
+						{{ choices.addresses.lastname}}
+						<br>
+						{{ choices.addresses.address}}
+						<br>
+						{{ choices.addresses.postal}}.
+						{{ choices.addresses.city}}
+						<br>
+						{{ choices.addresses.country}}
+						<br>
+						{{ choices.addresses.phone}}
+						<br>
+					</p>
+				</div>
+				<div class="bg-light rounded ps-2">
+					<p class="mb-0">
+						<b>Transporteur :</b>
+					</p>
+					<p>{{ choices.carriers.name}}
+						<br>{{ choices.carriers.description}}</p>
+				</div>
+				{# {{dump(cart)}} #}
+			</div>
+
+
+			<div class="col-md-4">
+				<div class="bg-light p-3 rounded">
+
+					<p class="w-100 d-flex justify-content-between">
+						<span class="fw-semibold">Montant Total Produits :</span>
+						{{totalWt|price}}
+					</p>
+					<p class="w-100 d-flex justify-content-between">
+						<span class="fw-semibold">Montant Total Transport :</span>
+						{{ choices.carriers.price|price}}
+					</p>
+					<p class="w-100 d-flex justify-content-between">
+						<span class="fw-semibold">Total commande :</span>
+						<b>{{ (totalWt + choices.carriers.price)|price}}</b>
+					</p>
+					<a href="{{ path('app_order')}}" class="btn btn-dark w-100 mt-3">Payer</a>
+				</div>
+
+			</div>
+		</div>
+	</div>
+{% endblock %}

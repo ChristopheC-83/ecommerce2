@@ -109,6 +109,22 @@ class Cart
         return $price;
     }
 
+    // fonction test pour le total TTC * 2, aucun interet
+    public function  getTotal2(){ 
+        $cart = $this->getCart();
+        $price2 = 0;
+
+        if (!isset($cart)) {
+            return $price2;
+        }
+
+        foreach ($cart as $product) {
+            $price2 += ($product['object']->getPriceWt() * $product['qty']) * 2;
+        }
+        return $price2;
+    
+    }
+
     // retourne le contenu du panier
     public function getCart()
     {

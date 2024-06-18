@@ -38,7 +38,7 @@ class OrderType extends AbstractType
                 ],
             ])
             ->add('submit', SubmitType::class, [
-                'label' => "Payer ma commande",
+                'label' => "Récapitulatif de ma commande",
                 'attr' => [
                     'class' => 'btn btn-dark w-100 mt-2',
                 ],
