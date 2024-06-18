@@ -47,9 +47,38 @@ class Order
     #[ORM\OneToMany(targetEntity: OrderDetail::class, mappedBy: 'myOrder', cascade:["persist"])]
     private Collection $orderDetails;
 
+    #[ORM\ManyToOne(inversedBy: 'orders')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
     public function __construct()
     {
         $this->orderDetails = new ArrayCollection();
+    }
+
+    public function getTotalWt()
+    { 
+        $totalTtc = 0;
+        $products = $this->getOrderDetails();
+
+        foreach ($products as $product) {
+            $coeff = 1 + ($product->getProductTVA() / 100);
+            $totalTtc += $product->getProductPrice() * $coeff * $product->getProductQuantity();
+                       
+        }
+        return $totalTtc;
+    }
+    public function getTotalTVA()
+    { 
+        $totalTva = 0;
+        $products = $this->getOrderDetails();
+
+        foreach ($products as $product) {
+            $coeff = $product->getProductTVA() / 100;
+            $totalTva += $product->getProductPrice() * $coeff;
+            // dd($totalTva);            
+        }
+        return $totalTva;
     }
 
     public function getId(): ?int
@@ -143,6 +172,18 @@ class Order
                 $orderDetail->setMyOrder(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

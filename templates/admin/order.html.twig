@@ -1,0 +1,129 @@
+{% extends '@!EasyAdmin/layout.html.twig' %}
+{% block main %}
+
+	<h3>Commande n°
+		{{ order.id }}</h3>
+
+	{# Inclusion du fichier admin/state.html.twig avec le contexte nécessaire #}
+	{{ include('admin/state.html.twig', { field: { 'value': order.state } }) }}
+
+	<p>Passée le
+		{{ order.createdAt|date('d / m / Y') }}</p>
+
+	<div class="row">
+		<div class="col-md-6">
+			<p>
+				<b>Adresse de livraison :</b>
+			</p>
+			<p>{{ order.delivery|raw }}</p>
+		</div>
+		<div class="col-md-6">
+			<p>
+				<b>Transporteur :</b>
+			</p>
+			<p>{{ order.carrierName|raw }}</p>
+		</div>
+	</div>
+
+	<p>
+		<b>Contenu de la commande :</b>
+	</p>
+
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th scope="col">Illustration</th>
+				<th scope="col">Nom du produit</th>
+				<th scope="col">Quantité</th>
+				<th scope="col">PU HT</th>
+				<th scope="col">TVA</th>
+				<th scope="col">Prix Total TTC</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for product in order.orderDetails %}
+				<tr>
+					<td>
+						<img src="uploads/illustrations/{{ product.productIllustration }}" alt="{{ product.productName }}" width="120px">
+					</td>
+					<td>{{ product.productName }}</td>
+					<td>{{ product.productQuantity }}</td>
+					<td>{{ product.productPrice|price }}</td>
+					<td>{{ product.productTVA }}%</td>
+					{% set coeff = 1 + (product.productTVA / 100) %}<td>{{ ((product.productPrice * coeff) * product.productQuantity)|price }}
+					</td>
+				</tr>
+			{% endfor %}
+			<tr>
+				<td>
+					<p>
+						<b>Transporteur
+						</b>
+					</p>
+				</td>
+				<td>{{ order.carrierName }}
+				</td>
+				<td>1
+				</td>
+				<td></td>
+				<td></td>
+				<td>{{ order.carrierPrice|price }}
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p>
+						<b></b>
+					</p>
+				</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<p>
+						<b>Total HT :
+						</b>
+					</p>
+				</td>
+				<td class="text-right">{{ (order.totalWt - order.totalTva)|price }}
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p>
+						<b></b>
+					</p>
+				</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<p>
+						<b>Total TVA :
+						</b>
+					</p>
+				</td>
+				<td class="text-right">{{ order.totalTva|price }}
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p>
+						<b></b>
+					</p>
+				</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<p>
+						<b>Total TTC :
+						</b>
+					</p>
+				</td>
+				<td class="text-right">{{ order.totalWt|price }}
+				</td>
+			</tr>
+		</tbody>
+	</table>
+{% endblock %}

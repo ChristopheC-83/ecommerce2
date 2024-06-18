@@ -84,6 +84,7 @@ class OrderController extends AbstractController
 
             //  envoi panier en DB => le tranporteur, la date de passage de cmde puis création des articles raccrochées à la cmde
             $order = new Order();
+            $order->setUser($this->getUser());
             $order->setCreatedAt(new \DateTime());
             $order->setState(1);
             $order->setCarrierName($form->get('carriers')->getData()->getName());
