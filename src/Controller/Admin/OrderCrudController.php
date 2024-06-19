@@ -59,7 +59,7 @@ class OrderCrudController extends AbstractCrudController
         // context travaille sur la cmde sue laquelle nous cliquons
 
         $order = $context->getEntity()->getInstance();
-        // dd($order);
+        dd($order);
 
         return $this->render('admin/order.html.twig', [
             'order' => $order,
