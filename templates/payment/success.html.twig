@@ -8,7 +8,7 @@
 	<div class="container text-center">
 		<h1 class=" my-5">✅ Merci pour votre commande !</h1>
 
-        <a href="#" class="btn btn-success fs-3">Consulter ma commande.</a>
+        <a href="{{ path('app_account_order', {'id_order' : order.id})}}" class="btn btn-success fs-3">Consulter ma commande.</a>
         </div>
 
 {% endblock %}

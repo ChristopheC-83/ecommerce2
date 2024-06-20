@@ -4,42 +4,48 @@
 	<div class="container">
 		<h1 class="text-decoration-underline my-5">Mon Compte</h1>
 
-		<div class="row">
-			<div class="col-md-4">
-				{% include 'account/_menu.html.twig' %}
+		{# {{dump(orders)}} #}
+
+		{% if orders|length == 0 %}
+			<div class="alert alert-info">Vous n'avez aucune commande de sauvegardée !</div>
+
+		{% else %}
+
+
+			<div class="row">
+				<div class="col-md-4">
+					{% include 'account/_menu.html.twig' %}
+				</div>
+				<div class="col-md-7 ms-auto">
+					<h5 class="mb-4">Consulter mes commandes</h5>
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th scope="col">Num de Cmde</th>
+								<th scope="col">Date</th>
+								<th scope="col">Satut</th>
+								<th scope="col">Total TTC</th>
+								<th scope="col"></th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for order in orders %}
+
+								<tr>
+									<td>{{order.id}}</td>
+									<td>{{order.createdAt|date('d/m/Y')}}</td>
+									<td>{{order.totalWt|price}}</td>
+									<td>{{ include('admin/state.html.twig', { field: { 'value': order.state } }) }}</td>
+									<td>
+										<a href="{{ path('app_account_order', {'id_order' : order.id})}}" class="badge text-bg-primary my-2 p-1 px-2">Détails</a>
+									</td>
+								</tr>
+
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
 			</div>
-			<div class="col-md-7 ms-auto">
-				<h5 class="mb-4">Consulter mes commandes</h5>
-				<table class="table table-striped">
-					<thead>
-						<tr>
-							<th scope="col">#</th>
-							<th scope="col">First</th>
-							<th scope="col">Last</th>
-							<th scope="col">Handle</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<th scope="row">1</th>
-							<td>Mark</td>
-							<td>Otto</td>
-							<td>@mdo</td>
-						</tr>
-						<tr>
-							<th scope="row">2</th>
-							<td>Jacob</td>
-							<td>Thornton</td>
-							<td>@fat</td>
-						</tr>
-						<tr>
-							<th scope="row">3</th>
-							<td colspan="2">Larry the Bird</td>
-							<td>@twitter</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
+		{% endif %}
 	</div>
-</div>{% endblock %}
+{% endblock %}
