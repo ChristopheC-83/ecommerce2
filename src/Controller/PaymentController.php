@@ -81,7 +81,8 @@ class PaymentController extends AbstractController
                 ]
             ],
             'mode' => 'payment',
-            'success_url' => $_ENV['DOMAIN'] . '/success.html', //url après paiement validé
+            //url après paiement validé
+            'success_url' => $_ENV['DOMAIN'] . '/commande/merci/{CHECKOUT_SESSION_ID}',
 
             // url de retour par l'user
             // si pb lors du pmaiement, c'est stripe qui gere !
@@ -96,12 +97,30 @@ class PaymentController extends AbstractController
 
     }
 
-    #[Route('/commande/merci/{id_order}', name: 'app_payment_success')]
-    public function success($id_order, OrderRepository $orderRepository): Response
+    #[Route('/commande/merci/{stripe_session_id}', name: 'app_payment_success')]
+    public function success($stripe_session_id, OrderRepository $orderRepository, EntityManagerInterface $entityManagerInterface): Response
     {
+        $order = $orderRepository->findOneBy([
+            'stripe_session_id' => $stripe_session_id,
+            'user' => $this->getUser(),
+        ]);
 
-        dd('coucou');
+        if (!$order) {
+            return $this->redirectToRoute('app_home');
+        }
+        if ($order->getState() == 1) {
+            $order->setState(2);
+            $entityManagerInterface->flush();
+
+        }
+
+        return $this->render('payment/success.html.twig', [
+            'order' => $order,
+
+        ]);
     }
+
+
 
 
 }
