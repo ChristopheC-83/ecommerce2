@@ -107,4 +107,11 @@ class OrderDetail
 
         return $this;
     }
+
+    public function  getProductPriceWt(){     // on l'appelle... ça évite les répétitions de calculs dans nos controllers
+        
+        $coeff = 1 + ($this->productTVA / 100);
+        return $this->productPrice * $coeff;
+    
+    }
 }
