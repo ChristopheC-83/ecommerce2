@@ -1,0 +1,106 @@
+{#  le pdf ne prend pas le css externalisé  #}
+{# on doit le fzair eà la main ! #}
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Impression facture</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				text-align: center;
+			}
+
+			.container_price {
+				width: 100%;
+			}
+			.content_price {
+			margin-top: 15px;
+			width: 30%;
+			text-align:left;
+			margin-left: auto;
+			}
+			.content_price p {
+				display: flex;
+				justify-content: space-between;
+			}
+		</style>
+		<link rel="stylesheet" href="pdf.css">
+	</head>
+	<body>
+
+
+		<img width="150px" src={{logo}} alt="logo">
+		<h3 class='text-center color'>Facture Commande n°
+			{{order.id}}</h3>
+		<br>
+		<table width="100%">
+			<tr>
+				<td width="30%">
+					<p>
+						<b>Mon commerce</b><br>Rue ici86500.
+						<br>
+						Trouville
+						<br>Tel : 0607080910
+						<br>
+						Email : contact@ecommerce.com</p>
+				</td>
+				<td width="40%"></td>
+				<td width="30%">
+					<p>
+						<b>Client(e) :</b>
+						<br>{{order.delivery|raw}}</p>
+				</td>
+			</tr>
+		</table>
+		<hr>
+		<h3>
+			<b>Détails de la commande :</b>
+		</h3>
+		<table width="100%" style="text-align:left">
+			<thead>
+				<tr>
+					<th width="40%" style="text-align:left">Nom du produit</th>
+					<th width="15%" style="text-align:left">Quantité</th>
+					<th width="15%" style="text-align:left">PU HT</th>
+					<th width="15%" style="text-align:left">TVA</th>
+					<th width="15%" style="text-align:left">Total TTC</th>
+				</tr>
+			</thead>
+			<br>
+			<tbody>
+				{% for product in order.orderDetails %}
+					<tr>
+						<td class="">{{ product.productName }}</td>
+						<td class="">{{ product.productQuantity }}</td>
+						<td class="">{{ product.productPrice|price }}</td>
+						<td class="">{{ product.productTVA }}%</td>
+						{% set coeff = 1 + (product.productTVA / 100) %}<td class="">{{ ((product.productPrice * coeff) * product.productQuantity)|price }}
+						</td>
+					</tr>
+				{% endfor %}
+				<br>
+				<tr>
+					<td>Transport :
+						{{order.carrierName}}</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td>{{order.carrierPrice|price}}</td>
+				</tr>
+				<br>
+
+			</tbody>
+		</table>
+		<div class="container_price">
+			<div class="content_price">
+				<p><b>Total HT : </b>{{(order.totalWt - order.totalTva)|price}}</p>
+				<p><b>Total TVA : </b>{{order.totalTva|price}}  </p>
+				<p><b>Total TTC : </b>{{order.totalWt |price}} </p>
+			
+			</div>
+		</div>
+
+	</body>
+</html>

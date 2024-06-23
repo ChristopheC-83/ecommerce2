@@ -3,13 +3,18 @@
 
 	<h3>Commande n°
 		{{ order.id }}</h3>
+	<a href="{{ path('app_invoice_admin', {id_order : order.id} )}}" target="_blank">
+		🖨️ Voir la facture
+	</a><br>
 
 	{# Inclusion du fichier admin/state.html.twig avec le contexte nécessaire #}
 	{{ include('admin/state.html.twig', { field: { 'value': order.state } }) }}
 
 	<p>Passée le
 		{{ order.createdAt|date('d / m / Y') }}</p>
-		<p>Stripe_session_id : {{order.stripeSessionId}} </p>
+	<p>Stripe_session_id :
+		{{order.stripeSessionId}}
+	</p>
 
 	<div class="row">
 		<div class="col-md-6">
@@ -55,7 +60,7 @@
 					</td>
 				</tr>
 			{% endfor %}
-			<tr >
+			<tr>
 				<td>
 					<p>
 						<b>Transporteur
@@ -128,5 +133,5 @@
 		</tbody>
 	</table>
 
-    {# {{dump(order)}} #}
+	{# {{dump(order)}} #}
 {% endblock %}

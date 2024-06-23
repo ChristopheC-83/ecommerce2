@@ -6,6 +6,7 @@ use App\Entity\Product;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
@@ -43,6 +44,7 @@ class ProductCrudController extends AbstractCrudController
 
         return [
             TextField::new('name')->setLabel('désignation')->setHelp('nom du véhicule'),
+            BooleanField::new('isHomePage')->setLabel('Mettre en avant ?')->setHelp('Mettre en 1 Sur la HomePage'),
             SlugField::new('slug')->setLabel('URL')->setTargetFieldName('name')->hideOnIndex()->setHelp('URL du véhicule généré automatiquement !'),
             TextEditorField::new('description')->setLabel('description')->setHelp('description du véhicule'),
             ImageField::new('illustration')

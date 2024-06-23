@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20240620064105 extends AbstractMigration
+final class Version20240622064222 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,14 +20,12 @@ final class Version20240620064105 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE `order` ADD stripe_session_id LONGTEXT DEFAULT NULL');
+        $this->addSql('ALTER TABLE header ADD illustration VARCHAR(255) NOT NULL');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE `order` DROP FOREIGN KEY FK_F5299398A76ED395');
-        $this->addSql('DROP INDEX IDX_F5299398A76ED395 ON `order`');
-        $this->addSql('ALTER TABLE `order` DROP stripe_session_id');
+        $this->addSql('ALTER TABLE header DROP illustration');
     }
 }

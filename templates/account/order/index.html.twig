@@ -10,9 +10,15 @@
 				{% include 'account/_menu.html.twig' %}
 			</div>
 			<div class="col-md-8 ms-auto">
-            <button class="btn btn-outline-info btn-sm mb-4"><a href="{{ path('app_account')}}">Retour</a></button>
+				<button class="btn btn-outline-info btn-sm mb-4">
+					<a href="{{ path('app_account')}}">Retour</a>
+				</button>
 				<h3>Commande n°
-					{{ order.id }}</h3>
+					{{ order.id }}
+				</h3>
+				<a href="{{ path('app_invoice_customer', {id_order : order.id} )}}" target="_blank">
+					🖨️ Ma facture
+				</a><br>
 
 				{# Inclusion du fichier admin/state.html.twig avec le contexte nécessaire #}
 				{{ include('admin/state.html.twig', { field: { 'value': order.state } }) }}
@@ -35,7 +41,7 @@
 						<p>{{ order.carrierName|raw }}</p>
 					</div>
 				</div>
-                <hr>
+				<hr>
 
 				<p>
 					<b>Contenu de la commande :</b>
