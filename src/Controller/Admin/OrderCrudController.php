@@ -2,7 +2,9 @@
 
 namespace App\Controller\Admin;
 
+use App\Classe\Mail;
 use App\Entity\Order;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -14,9 +16,17 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
+use Symfony\Component\HttpFoundation\Request;
 
 class OrderCrudController extends AbstractCrudController
 {
+    private $em;
+
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->em = $entityManager;
+    }
     public static function getEntityFqcn(): string
     {
         return Order::class;
@@ -51,18 +61,59 @@ class OrderCrudController extends AbstractCrudController
         ;
     }
 
-    public function show(AdminContext $context)
+
+    // fonction du changement de statut de la commande
+    public function changeState($state, $order)
     {
+
+
+        // modification enDB
+        $order->setState($state);
+        $this->em->flush();
+        // informons le client du changement de statut de la commande
+
+        $mail = new Mail();
+        $vars = [
+            'firstname' => $order->getUser()->getFirstname(),
+            'lastname' => $order->getUser()->getLastname(),
+            'id_order' => $order->getId(),
+        ];
+
+        $mail->send(
+            $order->getUser()->getEmail(),
+            $order->getUser()->getFirstname() . " " . $order->getUser()->getLastname(),
+            'Modification du statut de votre commande',
+            "order_state_".$state.".html",
+            $vars
+        );
+
+
+    }
+
+    public function show(AdminContext $context, AdminUrlGenerator $adminUrlGenerator, Request $request)
+    {
+        $order = $context->getEntity()->getInstance();
+        // dd($order);
+
+
+        // on récupère l'URL de notre action "show"
+        $url = $adminUrlGenerator->setController(self::class)->setAction('show')->setEntityId($order->getId())->generateUrl();
+
+        // gestion changement statut s'il y en a un
+
+        if ($request->get('state')) {
+            $this->changeState($request->get('state'), $order);
+        }
+
+        // dd($url);
 
         // ici on récupère l'entité qu'on observe
         // "vas me chercher la cmde num...."
         // context travaille sur la cmde sue laquelle nous cliquons
 
-        $order = $context->getEntity()->getInstance();
-        // dd($order);
-
         return $this->render('admin/order.html.twig', [
             'order' => $order,
+            'current_url' => $url,
         ]);
     }
 

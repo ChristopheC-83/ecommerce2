@@ -26,6 +26,7 @@ class Order
     // 2 paiement accepté
     // 3 en cours de préparation
     // 4 expédié
+    // 5 annulé
 
     #[ORM\Column]
     private ?int $state = null;
