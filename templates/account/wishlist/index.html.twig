@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<div class="container">
+		<h1 class="text-decoration-underline my-5">Mon Compte</h1>
+
+		<div class="row">
+			<div class="col-md-4">
+				{% include 'account/_menu.html.twig' %}
+			</div>
+			<div class="col-md-7 ms-auto">
+				<h5 class="mb-4">Ma liste de souhaits
+
+					{% if app.user.wishlists|length > 0 %}
+
+						<span class="">
+							{% if app.user.wishlists|length == 1%}
+								contient : 1 article.
+							{% else %}
+								contient :
+								{{ app.user.wishlists|length }}
+								articles.
+							{% endif %}
+						</span>
+					{% else %}
+						<br><br>
+						Elle est vide pour le moment !
+					{% endif %}
+				</h5>
+				{# {{dump(app.user.wishlists)}} #}
+				{% if app.user.wishlists|length > 0 %}
+
+					<div class="row gap-2 ">
+						{% for product in app.user.wishlists %}
+
+							<div class="col-md-4 text-center">
+								<a href="{{ path('app_product', { slug : product.slug}) }}" class="text-black">
+									<img src="/uploads/illustrations/{{ product.illustration }}" alt="" class="img-fluid rounded shadow-sm">
+									<div class="text-center fw-bold text-capitalize">{{ product.name }}</div>
+								</a>
+								<div class="text-center">{{ product.pricewt|price }}</div>
+								<a href="{{ path('app_account_wishlist_remove', {id:product.id})}}" class="text-secondary text-small">Supprimer</a>
+							</div>
+
+
+						{% endfor %}
+					</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</div>{% endblock %}

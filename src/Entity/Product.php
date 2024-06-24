@@ -37,6 +37,8 @@ class Product
     #[ORM\Column(nullable: true)]
     private ?bool $isHomePage = null;
 
+   
+
     public function getId(): ?int
     {
         return $this->id;
@@ -144,4 +146,6 @@ class Product
         $this->isHomePage = $isHomePage;
         return $this;
     }
+
+ 
 }

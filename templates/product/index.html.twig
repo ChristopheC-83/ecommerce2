@@ -1,14 +1,13 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-	<div
-		class="container my-5">
-		{# {{dump(product.category.name)}} #}
+	<div class="container my-5">
+		{# {{dump(product)}} #}
+		{# {{dump(app.user.wishlists)}} #}
 
-		<div class="row">
-			<div class="col-md-6">
+			<div class="row"> <div class="col-md-6">
 				<img src="/uploads/illustrations/{{product.illustration}}" alt="{{ product.name }}" class="img-fluid"></div>
-			<div class="col-md-6 d-flex flex-column justify-content-between">
+			<div class="col-md-6 d-flex flex-column justify-content-between position-relative">
 
 				<span class="small text-secondary fst-italic ">
 					<a href="{{ path('app_categories')}}" class="text-secondary">Tous les produits</a>
@@ -17,16 +16,56 @@
 					>
 					<span class="text-capitalize">{{ product.name }}</span>
 				</span>
-				<h1 class="text-decoration-underline mb-3 text-uppercase">{{ product.name }}</h1>
-                    <p class="fw-bold">{{product.price|price}}</p>
+				<div class="d-flex justify-content-between align-items-center">
+					<h1 class="text-decoration-underline mb-3 text-uppercase">{{ product.name }}</h1>
+					{# <div style="font-size:40px" ><a href="" class="text-dark"><i class="fa-regular fa-heart"></i></a></div> #}
+					{# <i class="fa-solid fa-heart"></i> #}
+				</div>
+				<p class="fw-bold">{{product.price|price}}</p>
 
 				<div class="flex-grow-1">{{product.description|raw}}</div>
 
-				
-                    <a href="{{ path('app_cart_add', { id : product.id}) }}" class="btn btn-dark w-100">Ajouter au panier</a>
-                
+				<div class="d-flex justify-content-between align-items-center column-gap-5">
+					<a href="{{ path('app_cart_add', { id : product.id}) }}" class="btn btn-dark w-100">Ajouter au panier</a>
+
+					{% if app.user %}
+						{% if product in app.user.wishlists  %}
+							<a href="{{ path('app_account_wishlist_remove', {id : product.id}) }}" class="text-dark fs-4 in_wishlist">
+								<i class="fa-regular fa-heart"></i>
+							</a>
+						{% else %}
+							<a href="{{ path('app_account_wishlist_add', {id : product.id}) }}" class="text-dark fs-4  out_wishlist">
+								<i class="fa-regular fa-heart"></i>
+							</a>
+						{% endif %}
+
+
+					{% else %}
+						<a data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" class="text-dark fs-3 px-3">
+							<i class="fa-regular fa-heart"></i>
+						</a>
+					{% endif %}
+				</div>
+				<div class="collapse position-absolute top-100 start-100 translate-100 col-12 col-xl-9 col-xxl-6" id="collapseExample">
+					<div class="card card-body">
+						Pour ajouter ce produit dans votre wishlist,<br>
+						<div class="d-flex">
+							<a href="{{ path('app_login') }}">
+								connectez-vous
+							</a>
+							<span class="mx-1">
+								ou
+							</span>
+							<a href="{{ path('app_register') }}">
+								créez un compte
+							</a>
+							.
+						</div>
+					</div>
+				</div>
+
 			</div>
 		</div>
-
 	</div>
-{% endblock %}
+
+</div>{% endblock %}

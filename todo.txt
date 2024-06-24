@@ -1,3 +1,5 @@
 - modifier nom / prénom de l'utilisateur                 OK
 
 - tester la sécurité et accessibilité des différents roles (config, security.yaml)
+
+- ajouter au panier demuis la wishlist
