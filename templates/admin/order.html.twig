@@ -2,27 +2,30 @@
 {% block main %}
 	{# {{dump(order.state)}} #}
 	{# btn disponibles si order.state>1, is la cmde a bien été payée #}
-		{% if order.state > 1 %}<h2>Action sur la commande
-		</h2>
-			<a href="{{ current_url }}&state=3" class="btn btn-info mx-3
-						{% if order.state == 3 %}
-							d-none
-						{% endif %}
-						" onclick="return confirm('Êtes-vous sûr de vouloir passer le statut à -En préparation- ?')"> En préparation</a>
+		{%  if is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')%}
+			{% if order.state > 1 %}<h2>
+			Action sur la commande
+			</h2>
+				<a href="{{ current_url }}&state=3" class="btn btn-info mx-3
+											{% if order.state == 3 %}
+												d-none
+											{% endif %}
+											" onclick="return confirm('Êtes-vous sûr de vouloir passer le statut à -En préparation- ?')"> En préparation</a>
 
-		<a href="{{ current_url }}&state=4" class="btn btn-success mx-3
-					{% if order.state == 4 %}
-						d-none
-					{% endif %}
-					" onclick="return confirm('Êtes-vous sûr de vouloir passer le statut à -Expédiée- ?')">Cmde expédiée</a>
+			<a href="{{ current_url }}&state=4" class="btn btn-success mx-3
+									{% if order.state == 4 %}
+										d-none
+									{% endif %}
+									" onclick="return confirm('Êtes-vous sûr de vouloir passer le statut à -Expédiée- ?')">Cmde expédiée</a>
 
-		<a href="{{ current_url }}&state=5" class="btn btn-warning mx-3
-					{% if order.state == 5 %}
-						d-none
-					{% endif %}
-					" onclick="return confirm('Êtes-vous sûr de vouloir passer le statut à -Annulée- ?')">Cmde annulée</a>
-	{% else %}
-		<p>Commande en attende paiement, pas d'action possible.</p>
+			<a href="{{ current_url }}&state=5" class="btn btn-warning mx-3
+									{% if order.state == 5 %}
+										d-none
+									{% endif %}
+									" onclick="return confirm('Êtes-vous sûr de vouloir passer le statut à -Annulée- ?')">Cmde annulée</a>
+		{% else %}
+			<p>Commande en attende paiement, pas d'action possible.</p>
+		{% endif %}
 	{% endif %}
 	<hr>
 	<h3>Commande n°{{ order.id }}</h3>
