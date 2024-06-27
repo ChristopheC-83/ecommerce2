@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+
+	{% if error %}
+		<div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+	{% endif %}
+
+	<div class="container">
+		<h1 class="text-center text-decoration-underline my-5">Erreur !</h1>
+		<h3 class="text-center text-decoration-underline my-5">Cette page est introuvable !</h3>
+
+
+        <a href="{{ path('app_home')}}">Retour case départ !?!</a>
+
+
+
+
+		
+
+	</div>
+{% endblock %}

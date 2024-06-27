@@ -6,6 +6,7 @@ use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -38,6 +39,7 @@ class UserCrudController extends AbstractCrudController
     {
         $fields = [
             IdField::new('id')->hideOnForm(),   // ->hideOnForm() permet de cacher le champ dans le formulaire
+            DateField::new('lastLoginAt')->setLabel('Dernière connexion')->onlyOnIndex(),
             TextField::new('firstname')->setLabel('Prénom'),
             TextField::new('lastname')->setLabel('Nom'),
             TextField::new('email')->setLabel('email')->onlyOnIndex(),  // ->onlyOnIndex() permet de cacher le champ dans le formulaire
